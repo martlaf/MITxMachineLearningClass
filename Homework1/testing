@@ -1,0 +1,34 @@
+import numpy as np
+
+#x = np.array([[-4., 2.], [-2., 1.], [-1., -1.], [2., 2.], [1., -2.]])
+#y = np.array([1., 1., -1., -1., -1.])
+#results = np.zeros(y.size)
+#
+## Perceptron
+#theta = np.zeros(x.shape[1])
+#theta_0 = 0
+
+#for t in range(0, 4):
+#    for i in range(0, x.shape[0]):
+#        if y[i]*(np.dot(theta, x[i, ][np.newaxis].T) + theta_0) <= 0:
+#            theta += y[i]*x[i, ]
+#            theta_0 += y[i]
+#            print("theta = ", theta)
+#            print("theta_0 = ", theta_0)
+#            results[i] += 1
+#            print("results = ", results)
+
+
+# No offset, H1.6
+x = np.array([[0, 1], [-1, 0]])
+y = np.array([1., 1.])
+theta = np.zeros(x.shape[1])
+results = np.zeros(y.size)
+for t in range(0, 4):
+    for i in range(0, x.shape[0]):
+        if y[i]*(np.dot(theta, x[i, ][np.newaxis].T)) <= 0:
+            theta += y[i]*x[i, ]
+            print("theta = ", theta)
+            results[i] += 1
+            print("results = ", results)
+

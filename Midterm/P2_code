@@ -1,0 +1,43 @@
+import numpy as np
+import copy
+
+x = np.array([[0.,0.],[2.,0.],[1.,1.],[0.,2.],[3.,3.], [4.,1.],[5.,2.],[1.,4.],[4.,4.],[5.,5.]])
+y = np.array([-1, -1, -1, -1, -1, 1, 1, 1, 1, 1])
+problem_results = np.array([1.,65.,11.,31.,72.,30.,0.,21.,4.,15.])
+phi = np.hstack((np.hstack((((x[:,0]**2)[np.newaxis].T), (np.sqrt(2)*x[:,0]*x[:,1])[np.newaxis].T)),(x[:,1]**2)[np.newaxis].T))
+# Perceptron
+
+order = np.arange(0, x.shape[0])
+results = np.zeros(y.size)
+while not np.array_equal(results, problem_results):
+    results = np.zeros(y.size)
+    results_last = copy.deepcopy(results)
+    theta = np.zeros(phi.shape[1])
+    theta_0 = 0
+    #np.random.shuffle(order)
+    order = [4, 3, 5, 0, 7, 2, 1, 9, 8, 6]
+    for t in range(0, 100):
+        for i in order:
+            if y[i]*(np.dot(theta, phi[i, ][np.newaxis].T) + theta_0) <= 0:
+                theta += y[i]*phi[i, ]
+                theta_0 += y[i]
+                results[i] += 1
+        if np.array_equal(results_last, results): #converged
+            break
+        if np.array_equal(results, problem_results): #this is what we're looking for, even if not converged
+            break
+        results_last = copy.deepcopy(results)
+
+print("order = ", order)
+print("theta = ", theta)
+print("theta_0 = ", theta_0)
+#order =  [4 3 5 0 7 2 1 9 8 6]
+#theta =  [-21.        22.627417 -22.      ]
+#theta_0 =  110
+
+preds = np.dot(theta, phi.T) + theta_0
+print("predictions = ", preds)
+
+#so for this use case only, we can easily find the best margin taking distance from point [2,2] to [2,4],[5,1]
+#from the equation of the hyperplane, theta_1*x_1 + theta_2*x_2 + theta_0 = 0
+#thetam

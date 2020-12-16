@@ -1,0 +1,76 @@
+import numpy as np
+import copy
+
+x = np.array([[0.,0.],[2.,0.],[3.,0.],[0.,2.],[2.,2.],[5.,1.],[5.,2.],[2.,4.],[4.,4.],[5.,5.]])
+y = np.array([-1, -1, -1, -1, -1, 1, 1, 1, 1, 1])
+problem_results = np.array([1.,9.,10.,5.,9.,11.,0.,3.,1.,1.])
+
+# Perceptron
+
+order = np.arange(0, x.shape[0])
+results = np.zeros(y.size)
+while not np.array_equal(results, problem_results):
+    results = np.zeros(y.size)
+    results_last = copy.deepcopy(results)
+    theta = np.zeros(x.shape[1])
+    theta_0 = 0
+    #np.random.shuffle(order)
+    order = [0, 2, 7, 4, 5, 6, 3, 8, 1, 9]
+    #print("order = ", order)
+    for t in range(0, 30):
+        for i in order:
+            if y[i]*(np.dot(theta, x[i, ][np.newaxis].T) + theta_0) <= 0:
+                theta += y[i]*x[i, ]
+                theta_0 += y[i]
+                results[i] += 1
+        if np.array_equal(results_last, results): #converged
+            break
+        results_last = copy.deepcopy(results)
+print("order = ", order)
+print("theta = ", theta)
+print("theta_0 = ", theta_0)
+#theta =  [-4. -4.]
+#theta_0 =  18
+
+#order =  [9 0 6 3 2 7 4 8 5 1]
+#order =  [9 6 0 3 2 7 4 8 5 1]
+#order =  [8 0 1 2 9 3 7 4 5 6]
+#order =  [9 3 0 2 7 4 8 5 1 6]
+#order =  [7 4 0 9 5 1 3 8 6 2]
+#order =  [0 8 4 5 3 1 9 6 2 7]
+#order =  [1 8 0 2 9 3 7 4 5 6]
+#order =  [1 9 0 3 8 2 7 6 4 5]
+#order =  [7 4 0 9 5 6 3 1 8 2]
+#order =  [7 4 5 0 3 8 6 1 9 2]
+#order =  [3 9 0 2 7 4 8 5 1 6]
+#order =  [0 2 7 4 5 6 3 8 1 9]
+
+#so for this use case only, we can easily find the best margin taking distance from point [2,2] to [2,4],[5,1]
+#from the equation of the hyperplane, theta_1*x_1 + theta_2*x_2 + theta_0 = 0
+theta_maxmargin = [1, 1]
+theta_0_maxmargin = -5
+
+hinge_loss = 0
+for i in range(x.shape[0]):
+    agreement = y[i] * (np.dot(theta_maxmargin, x[i,]) + theta_0_maxmargin)
+    if agreement >= 1:
+        loss = 0
+    else:
+        loss = 1 - agreement
+    hinge_loss += loss
+
+print("total hinge loss = ", hinge_loss)
+
+theta_maxmargin = [0.5, 0.5]
+theta_0_maxmargin = -2.5
+
+hinge_loss = 0
+for i in range(x.shape[0]):
+    agreement = y[i] * (np.dot(theta_maxmargin, x[i,]) + theta_0_maxmargin)
+    if agreement >= 1:
+        loss = 0
+    else:
+        loss = 1 - agreement
+    hinge_loss += loss
+
+print("total hinge loss theta/2 = ", hinge_loss)
